@@ -13,7 +13,7 @@ class Post extends Model
     protected $fillable = ['title', 'excerpt','body','category_id','slug'];
 
     //attributes not allowed in mass assignment
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     //if a 'slug' is always the attribute used to find a Post uncomment this function
     //public function getRouteKeyName()
@@ -24,7 +24,42 @@ class Post extends Model
     //default attributes for every Post query that is performed
     protected $with = ['category','author'];
 
-    public function category() {
+    public function scopeFilter($query, array $filters)
+    {
+        //ddd($filters);
+
+
+        // its possible to convert to an arrow function
+        $query->when( $filters['search'] ?? false , fn($query, $search) =>     // Null Coalesce Operator in PHP (Laravel) - $statement ?? ''
+            $query->where( fn($query) =>
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('body', 'like', '%' . $search . '%')
+            )
+
+        );
+
+
+        $query->when( $filters['category'] ?? false , fn($query, $category) =>
+            $query->whereHas('category', fn($query) =>
+                    $query->where('slug','=', $category)
+                )
+
+            );
+        //ddd($query->get());
+            // $query
+            //     ->whereExists(fn($query) =>
+            //         $query->from('categories')
+            //             ->whereColumn('categories.id'     , 'posts.category_id')
+            //             ->where('categories.slug'   , $category)
+
+            // );
+
+    }
+
+
+
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 

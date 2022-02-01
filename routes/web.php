@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Models\Category;
@@ -17,40 +18,21 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/', function () {
-    //if you need to debug queries, use this and check the /storage/logs/laravel.log
-    // DB::listen(function ($query) {
-    //     logger($query->sql,$query->bindings);
-    // });
+Route::get('/', [PostController::class, 'index'])->name('home');
+Route::get('posts/{post:slug}', [PostController::class, 'show']);       //->where('post','[A-z_\-]+');         //whereAlpha, whereNumber
 
-    return view('posts', [
-        'posts' => Post::latest()->with('category','author')->get(),
-        'categories' => Category::all()
-    ]);
-});
-
-Route::get('posts/{post:slug}', function (Post $post) {     //Post::where('slug',$post)->firstOrFail()
-    //Find a post by its slug and pass it to a view called "post"
-
-    return view('post', [
-        'post' => $post
-    ]);
-});
-//->where('post','[A-z_\-]+');         //whereAlpha, whereNumber
-
-Route::get('categories/{category:slug}', function (Category $category) {
-    return view('posts', [
-        'posts' => $category->posts,
-        'currentCategory' => $category,
-        'categories' => Category::all()
-    ]);
-});
+// Route::get('categories/{category:slug}', function (Category $category) {
+//     return view('posts', [
+//         'posts' => $category->posts,
+//         'currentCategory' => $category,
+//         'categories' => Category::all()
+//     ]);
+// })->name('category');
 
 Route::get('authors/{author:username}', function (User $author) {
     //ddd($author);
     return view('posts', [
-        'posts' => $author->posts,
-        'categories' => Category::all()
+        'posts' => $author->posts
     ]);
 });
 
