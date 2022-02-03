@@ -12,7 +12,7 @@ services:
             - 'host.docker.internal:host-gateway'
         container_name: laracast_tutorial_app
         ports:
-            - '${APP_PORT}:${APP_HOST_PORT}'
+            - ${APP_PORT}:${APP_HOST_PORT}
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -27,10 +27,9 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
-        depends_on:
-            - mysql
+
     mysql:
-        image: 'mysql:5.7'
+        image: mysql:5.7
         restart: always
         container_name: laracast_tutorial_mysql
         ports:
@@ -57,4 +56,3 @@ networks:
 volumes:
     sail-mysql:
         driver: local
-

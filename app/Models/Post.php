@@ -26,10 +26,6 @@ class Post extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        //ddd($filters);
-
-
-        // its possible to convert to an arrow function
         $query->when( $filters['search'] ?? false , fn($query, $search) =>     // Null Coalesce Operator in PHP (Laravel) - $statement ?? ''
             $query->where( fn($query) =>
                 $query->where('title', 'like', '%' . $search . '%')
@@ -38,14 +34,19 @@ class Post extends Model
 
         );
 
-
         $query->when( $filters['category'] ?? false , fn($query, $category) =>
             $query->whereHas('category', fn($query) =>
-                    $query->where('slug','=', $category)
+                    $query->where('slug', $category)
                 )
 
             );
-        //ddd($query->get());
+
+        $query->when( $filters['author'] ?? false , fn($query, $author) =>
+            $query->whereHas('author', fn($query) =>
+                    $query->where('username', $author)
+                )
+
+            );
             // $query
             //     ->whereExists(fn($query) =>
             //         $query->from('categories')
