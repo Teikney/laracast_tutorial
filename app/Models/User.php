@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
     ];
@@ -46,5 +47,17 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    //mutator for POSTs
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password']= bcrypt($password);
+    }
+
+    //accesser for GETs
+    public function getUsernameAttribute($username)
+    {
+        return ucwords($username);  //capitalize de User->username
     }
 }

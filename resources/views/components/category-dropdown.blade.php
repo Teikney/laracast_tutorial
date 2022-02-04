@@ -9,12 +9,14 @@
     </x-slot>
 
 
-    <x-dropdown-item href="/" :active="isset($currentCategory) ? false : request()->routeIs('home')">All</x-dropdown-item>
+    <x-dropdown-item href="/?{{ http_build_query( request()->except('category', 'page')) }}"
+        :active="isset($currentCategory) ? false : request()->routeIs('home')">All
+    </x-dropdown-item>
 
     @foreach ($categories as $category)
     {{-- {{  ? 'bg-blue-500 text-white' : '' }} --}}
         <x-dropdown-item
-            href="/?category={{ $category->slug }}&{{ http_build_query( request()->except('category')) }}"
+            href="/?category={{ $category->slug }}&{{ http_build_query( request()->except('category', 'page')) }}"
             :active="isset($currentCategory) && $currentCategory->is($category)"
             {{-- Another way of doing
                     :active="request()->is('?category={$category->slug}')" --}}

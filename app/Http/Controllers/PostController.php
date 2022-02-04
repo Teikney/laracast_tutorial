@@ -10,9 +10,14 @@ class PostController extends Controller
 {
     public function index()
     {
-        //ddd(request(['search','category']));
         return view('posts.index', [
-            'posts' => Post::/* latest()-> */filter( request(['search', 'category', 'author']) )->get(),   //  ['search'] is return the same as request()->only('search')
+            'posts' => Post::latest()->filter(      //  ['search'] is return the same as request()->only('search')
+                request([
+                    'search',
+                    'category',
+                    'author'
+                ])
+            )->paginate(6)->withQueryString(),
         ]);
     }
 
