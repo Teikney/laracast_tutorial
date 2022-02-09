@@ -21,8 +21,10 @@ class SessionsController extends Controller
         //attempt to authenticate and log in the user
         //based on the provided credentials
         //authentication fails
-        if(!auth()->attempt($attributes)) {
+
+        if(!auth()->attempt($attributes, true)) {
             //auth failed
+            ddd($attributes);
             throw ValidationException::withMessages([
                 'email'  => 'Your provided credentials could not be verified.'
             ]);

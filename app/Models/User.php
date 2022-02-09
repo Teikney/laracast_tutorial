@@ -56,8 +56,8 @@ class User extends Authenticatable
     }
 
     //accesser for GETs
-    public function getUsernameAttribute($username)
+    public function getNameAttribute($name)
     {
-        return ucwords($username);  //capitalize de User->username
+        return ucwords($name);  //capitalize de User->name
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Support\Facades\Hash;
 
 
 class DatabaseSeeder extends Seeder
@@ -23,9 +24,11 @@ class DatabaseSeeder extends Seeder
 
         $user = User::factory()->create([
             'name' => 'John Doe',
-            'username' => 'JohnDoe'
+            'username' => 'JohnDoe',
+            'email'     => 'john.doe@example.net',
+            'password'  => Hash::make('password')
         ]);
-        Post::factory(30)->create([
+        Post::factory(5)->create([
             'user_id' => $user->id
         ]);
 
