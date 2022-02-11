@@ -44,7 +44,7 @@
                     </div>
 
                     <h1 class="font-bold text-3xl lg:text-4xl mb-10">
-                        {{ $post->title }}
+                        {{ ucwords($post->title) }}
                     </h1>
 
                     <div class="space-y-4 lg:text-lg leading-loose space-y-4">

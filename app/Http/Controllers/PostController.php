@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Models\Post;
-use App\Models\Category;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
     public function index()
     {
+        //dd(Gate::allows('admin'));
+        //dd(request()->user()->can('admin'));
+        //$this->authorize('admin');
         return view('posts.index', [
-            'posts' => Post::latest()->filter(      //  ['search'] is return the same as request()->only('search')
+            'posts' => Post::latest()->filter(      //  ['search'] return's the same as request()->only('search')
                 request([
                     'search',
                     'category',
@@ -30,27 +30,6 @@ class PostController extends Controller
         return view('posts.show', [
             'post' => $post
         ]);
-    }
-
-    public function create(Post $post) { return view('posts.create'); }
-
-    public function store(Post $post) {
-
-        $attributes = request()->validate([
-            'title'         => 'required',
-            'thumbnail'     => 'required|image',
-            'excerpt'       => 'required',
-            'body'          => 'required',
-            'category_id'   => ['required', Rule::exists('categories','id')]
-        ]);
-
-        $attributes['slug'] = Str::slug($attributes['title']);
-        $attributes['user_id'] = auth()->user()->id;
-        $attributes['thumbnail'] = request()->file('thumbnail')->store('thumbnails');
-
-        Post::create($attributes);
-
-        return redirect('/');
     }
 
 }

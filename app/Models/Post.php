@@ -55,8 +55,11 @@ class Post extends Model
 
             // );
 
-    }
+        $query->when( $filters['slug'] ?? false , fn($query, $slug) =>
+            $query->where('slug','like',$slug)
+        );
 
+    }
 
 
     public function comments()
